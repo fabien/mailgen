@@ -268,27 +268,39 @@ if (locals.action) {
                                     <% if (locals.table) { %>
                                         <% table.forEach(function (tableItem, i) { -%>
                                             <br />
-                                            <h3><%- tableItem.title %></h3>
-                                            <table class="data-table" width="100%" cellpadding="0" cellspacing="0">
+                                            <% if(tableItem.title !== false) { %><h3><%- tableItem.title %></h3><% } %>
+                                            <table class="data-table" width="100%" cellpadding="0" cellspacing="0"
+                                            <% if(tableItem.style) { %>style="<%= tableItem.style %>"<% } %>
+                                            >
+                                                <% if(!tableItem.columns || (tableItem.columns && tableItem.columns.headers !== false)) {%>
                                                 <tr>
                                                     <% for (var column in tableItem.data[0]) {%>
                                                     <th
                                                         <% if(tableItem.columns && tableItem.columns.customWidth && tableItem.columns.customWidth[column]) { %>
                                                             width="<%= tableItem.columns.customWidth[column] %>"
                                                         <% } %>
-                                                        <% if(tableItem.columns && tableItem.columns.customAlignment && tableItem.columns.customAlignment[column]) { %>
+                                                        <% if(tableItem.columns && tableItem.columns.customStyle && tableItem.columns.customStyle[column]) { %>
+                                                              style="<%= tableItem.columns.customStyle[column] %>"
+                                                        <% } else if(tableItem.columns && tableItem.columns.customAlignment && tableItem.columns.customAlignment[column]) { %>
                                                             style="text-align:<%= tableItem.columns.customAlignment[column] %>"
                                                         <% } %>
                                                     >
-                                                        <p><%- column.charAt(0).toUpperCase() + column.slice(1) %></p>
+                                                    <% if(tableItem.columns && tableItem.columns.headers && typeof tableItem.columns.headers[column] === 'string') { %>
+                                                      <p><%- tableItem.columns.headers[column] %></p>
+                                                    <% } else { %>
+                                                      <p><%- column.charAt(0).toUpperCase() + column.slice(1) %></p>
+                                                    <% } %>
                                                     </th>
                                                     <% } %>
                                                 </tr>
+                                                <% } %>
                                                 <% for (var i in tableItem.data) {%>
                                                 <tr>
                                                     <% for (var column in tableItem.data[i]) {%>
                                                     <td
-                                                        <% if(tableItem.columns && tableItem.columns.customAlignment && tableItem.columns.customAlignment[column]) { %>
+                                                        <% if(tableItem.columns && tableItem.columns.customStyle && tableItem.columns.customStyle[column]) { %>
+                                                            style="<%= tableItem.columns.customStyle[column] %>"
+                                                        <% } else if(tableItem.columns && tableItem.columns.customAlignment && tableItem.columns.customAlignment[column]) { %>
                                                             style="text-align:<%= tableItem.columns.customAlignment[column] %>"
                                                         <% } %>
                                                     >
